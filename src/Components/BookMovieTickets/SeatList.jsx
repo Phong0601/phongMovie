@@ -3,13 +3,11 @@ import { connect } from "react-redux";
 import { addSeat } from "../../Redux/action";
 import style from "./Home.module.css";
 export class SeatList extends Component {
+  toogleCheck = (seat) => {
+    this.props.dispatch(addSeat(seat));
+  };
 
-  toogleCheck=(seat)=>{
-   this.props.dispatch((addSeat(seat)))
-    
-  }
   render() {
-   
     return (
       <div>
         <h4 className="text-white fs-4">Màn hình</h4>
@@ -20,7 +18,9 @@ export class SeatList extends Component {
                 if (seatRow.hang === "") {
                   return (
                     <tr key={seatRow.hang}>
-                      <th className="text-warning fs-4 border-0">{seatRow.hang}</th>
+                      <th className="text-warning fs-4 border-0">
+                        {seatRow.hang}
+                      </th>
                       {seatRow.danhSachGhe.map((seat) => {
                         return (
                           <td key={seat.soGhe} className="border-0">
@@ -35,19 +35,20 @@ export class SeatList extends Component {
                 } else {
                   return (
                     <tr key={seatRow.hang}>
-                      <th className="text-warning fs-4 border-0">{seatRow.hang}</th>
+                      <th className="text-warning fs-4 border-0">
+                        {seatRow.hang}
+                      </th>
                       {seatRow.danhSachGhe.map((seat) => {
                         return (
                           <td key={seat.soGhe} className="border-0">
-                            <input 
                             
-                            //  onChange={(seat)=>this.toogleCheck(seat)}
-                            onClick={()=>this.toogleCheck(seat)}
+                            <input
+                              onClick={() => this.toogleCheck(seat)}
                               type={"checkbox"}
                               className={style.ghe}
                               disabled={seat.daDat}
                               value={seat.soGhe}
-                            /> 
+                            />
                           </td>
                         );
                       })}
@@ -65,8 +66,8 @@ export class SeatList extends Component {
 const mapStateToProp = (state) => {
   return {
     data: state.dataSeatState.dataSeat,
+    ticket: state.addValue.check,
   };
 };
 
 export default connect(mapStateToProp)(SeatList);
- 

@@ -4,3 +4,9 @@ export const addSeat = (value) => {
         payload:value,
     }
 }
+export const complete = (arr) => {
+    return {
+        type:"COMPLETE",
+        payload:arr
+    }
+}

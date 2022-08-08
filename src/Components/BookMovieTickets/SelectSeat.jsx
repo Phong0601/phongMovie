@@ -1,24 +1,18 @@
 import React, { Component, useEffect } from "react";
 import style from "./Home.module.css";
 import { connect } from "react-redux";
-import { addSeat } from "../../Redux/action";
+import { addSeat, complete } from "../../Redux/action";
 export class SelectSeat extends Component {
   handleDelete = (seat) => {
-     
     this.props.dispatch(addSeat(seat));
   };
   handleSubmit = () => {
-  
-    this.props.ticket.map((item) => {
-    
-      return item.daDat = true
-    });
+   console.log(this.props.ticket);
+   this.props.dispatch(complete(this.props.ticket))
   };
-  sumTotal=()=>{
-    console.log(this.props.ticket);
-  }
+
   render() {
-    
+    const total = this.props.ticket.reduce((total, cuurentItem) => total=cuurentItem.gia + total,0);
     return (
       <div className="selectSeat mt-5">
         <div className="selectSeat-top">
@@ -41,33 +35,25 @@ export class SelectSeat extends Component {
               <tr>
                 <th scope="col">Số ghế</th>
                 <th scope="col">Giá</th>
-                <th scope="col">Hủy</th>
+            
               </tr>
             </thead>
             <tbody>
               {this.props.ticket?.map((item) => {
-               
                 return (
                   <tr key={item.soGhe} className="text-warning">
                     <td>{item.soGhe}</td>
                     <td>{item.gia}</td>
-                    <td>
-                      <button
-                        onClick={() => this.handleDelete(item)}
-                        style={{ color: "red" }}
-                      >
-                        X
-                      </button>
-                    </td>
+                   
                   </tr>
                 );
               })}
               <tr>
                 <td>Tổng tiền</td>
-                <td className="text-warning">300000</td>
-                <td>
-                  <button onClick={() => this.handleSubmit()}>Thanh Toán</button>
+                <td className="text-warning">
+                 {total}
                 </td>
+               
               </tr>
             </tbody>
           </table>
