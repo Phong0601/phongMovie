@@ -4,6 +4,12 @@ export const addSeat = (value) => {
         payload:value,
     }
 }
+export const deleteSeat = (value) => {
+    return{
+        type:"DELETE_SEAT",
+        payload:value,
+    }
+}
 export const complete = (arr) => {
     return {
         type:"COMPLETE",

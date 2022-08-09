@@ -1,18 +1,24 @@
 import React, { Component, useEffect } from "react";
 import style from "./Home.module.css";
 import { connect } from "react-redux";
-import { addSeat, complete } from "../../Redux/action";
+import { addSeat, complete, deleteSeat } from "../../Redux/action";
 export class SelectSeat extends Component {
+ 
   handleDelete = (seat) => {
-    this.props.dispatch(addSeat(seat));
+    this.props.dispatch(deleteSeat(seat));
   };
-  handleSubmit = () => {
-   console.log(this.props.ticket);
-   this.props.dispatch(complete(this.props.ticket))
-  };
-
   render() {
-    const total = this.props.ticket.reduce((total, cuurentItem) => total=cuurentItem.gia + total,0);
+    const tinhTongTien = () => {
+      let tongTien = 0;
+      this.props.data.forEach((item) => {
+        item.danhSachGhe.forEach((seat) => {
+          if (seat.daDat) {
+            tongTien += seat.gia;
+          }
+        });
+      });
+      return tongTien;
+    };
     return (
       <div className="selectSeat mt-5">
         <div className="selectSeat-top">
@@ -35,25 +41,30 @@ export class SelectSeat extends Component {
               <tr>
                 <th scope="col">Số ghế</th>
                 <th scope="col">Giá</th>
-            
+                <th scope="col">Xóa </th>
               </tr>
             </thead>
             <tbody>
-              {this.props.ticket?.map((item) => {
-                return (
-                  <tr key={item.soGhe} className="text-warning">
-                    <td>{item.soGhe}</td>
-                    <td>{item.gia}</td>
-                   
-                  </tr>
-                );
+              {this.props.data?.map((item) => {
+                return item.danhSachGhe?.map((seat) => {
+                  if (seat.daDat === true) {
+                    return (
+                      <tr key={seat.soGhe} className="text-warning">
+                        <td>{seat.soGhe}</td>
+                        <td>{seat.gia}</td>
+                        <td>
+                          <button onClick={() => this.handleDelete(seat.soGhe)}>
+                            X
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                });
               })}
               <tr>
                 <td>Tổng tiền</td>
-                <td className="text-warning">
-                 {total}
-                </td>
-               
+                <td className="text-warning">{tinhTongTien()}</td>
               </tr>
             </tbody>
           </table>
@@ -64,7 +75,8 @@ export class SelectSeat extends Component {
 }
 const mapStateToProp = (state) => {
   return {
-    ticket: state.addValue.check,
+    data: state.dataSeatState.dataSeat,
+    // ticket: state.addValue.check,
   };
 };
 export default connect(mapStateToProp)(SelectSeat);

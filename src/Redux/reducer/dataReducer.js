@@ -7,9 +7,31 @@ const dataReducer = (currentState = initialState, action) => {
       const cloneData = [...action.payload];
 
       return { ...currentState, dataSeat: action.payload };
-    case "COMPLETE":
-     
-      return { ...currentState };
+    case "ADD_SEAT":
+      const cloneAdd = [...currentState.dataSeat];
+   
+      cloneAdd.forEach((item) => {
+      
+        item.danhSachGhe.forEach((seat) => {
+          if(seat.soGhe === action.payload){
+            seat.daDat = !seat.daDat
+          }
+        });
+      });
+      return { ...currentState,dataSeat : cloneAdd };
+ 
+    case "DELETE_SEAT":
+      const cloneDelete = [...currentState.dataSeat];
+      console.log(action.payload);
+      cloneDelete.forEach((item) => {
+        item.danhSachGhe.forEach((seat) => {
+          if(seat.soGhe === action.payload){
+            seat.daDat = !seat.daDat
+          }
+        });
+      });
+      return { ...currentState,dataSeat : cloneDelete };
+ 
     default:
       return currentState;
   }
